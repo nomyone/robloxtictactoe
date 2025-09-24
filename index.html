@@ -9,6 +9,11 @@
             color: #ffffff;
             margin: 0;
             padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
         img {
@@ -20,11 +25,79 @@
             left: 0;
             z-index: -1;
         }
+
+        #game-container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        #board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 5px;
+            margin: 20px auto;
+            width: 315px;
+            height: 315px;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: #555;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4em;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .cell:hover {
+            background-color: #777;
+        }
+
+        #reset-button {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            margin-top: 20px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        #reset-button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
 
-    <img src="https://wallpapercave.com/wp/wp6204950.jpg" alt="Futuristická fotografia">
+    <img src="https://wallpapercave.com/wp/wp6204950.jpg" alt="Roblox pozadie">
+
+    <div id="game-container">
+        <h2>Tic Tac Toe</h2>
+        <div id="status">Hráč X je na ťahu</div>
+        <div id="board">
+            <div class="cell" data-cell-index="0"></div>
+            <div class="cell" data-cell-index="1"></div>
+            <div class="cell" data-cell-index="2"></div>
+            <div class="cell" data-cell-index="3"></div>
+            <div class="cell" data-cell-index="4"></div>
+            <div class="cell" data-cell-index="5"></div>
+            <div class="cell" data-cell-index="6"></div>
+            <div class="cell" data-cell-index="7"></div>
+            <div class="cell" data-cell-index="8"></div>
+        </div>
+        <button id="reset-button">Reset Hry</button>
+    </div>
 
 </body>
 </html>
