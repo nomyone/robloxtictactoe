@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -80,10 +80,11 @@
 </head>
 <body>
 
-    <img src="https://wallpapercave.com/wp/wp6204950.jpg" alt="Roblox pozadie">
+    <img src="https://wallpapercave.com/wp/wp6204950.jpg" alt="Roblox background">
 
     <div id="game-container">
         <h2>Tic Tac Toe</h2>
+        <div id="status">Player X is on move</div>
         <div id="board">
             <div class="cell" data-cell-index="0"></div>
             <div class="cell" data-cell-index="1"></div>
@@ -99,7 +100,6 @@
     </div>
 
 </body>
-</html>
 <script>
     const statusDisplay = document.querySelector('#status');
     const gameBoard = document.querySelector('#board');
@@ -146,7 +146,7 @@
         }
 
         if (roundWon) {
-            statusDisplay.innerHTML = `Player ${currentPlayer} win!`;
+            statusDisplay.innerHTML = `Player ${currentPlayer} wins!`;
             gameActive = false;
             return;
         }
@@ -184,3 +184,4 @@
     document.querySelectorAll('.cell').forEach(cell => cell.addEventListener('click', handleCellClick));
     resetButton.addEventListener('click', handleRestartGame);
 </script>
+</html>
