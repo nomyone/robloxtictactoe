@@ -102,7 +102,6 @@
 </body>
 <script>
     const statusDisplay = document.querySelector('#status');
-    const gameBoard = document.querySelector('#board');
     const resetButton = document.querySelector('#reset-button');
     let gameActive = true;
     let currentPlayer = "X";
@@ -119,6 +118,59 @@
         [2, 4, 6]
     ];
 
+    const isWinner = (board, player) => {
+        return winningConditions.some(condition => {
+            return condition.every(index => board[index] === player);
+        });
+    };
+
+    const minimax = (board, depth, isMaximizing) => {
+        if (isWinner(board, "X")) return -10 + depth;
+        if (isWinner(board, "O")) return 10 - depth;
+        if (!board.includes("")) return 0;
+
+        if (isMaximizing) {
+            let bestScore = -Infinity;
+            for (let i = 0; i < board.length; i++) {
+                if (board[i] === "") {
+                    board[i] = "O";
+                    let score = minimax(board, depth + 1, false);
+                    board[i] = "";
+                    bestScore = Math.max(score, bestScore);
+                }
+            }
+            return bestScore;
+        } else {
+            let bestScore = Infinity;
+            for (let i = 0; i < board.length; i++) {
+                if (board[i] === "") {
+                    board[i] = "X";
+                    let score = minimax(board, depth + 1, true);
+                    board[i] = "";
+                    bestScore = Math.min(score, bestScore);
+                }
+            }
+            return bestScore;
+        }
+    };
+
+    const bestMove = () => {
+        let bestScore = -Infinity;
+        let move;
+        for (let i = 0; i < gameState.length; i++) {
+            if (gameState[i] === "") {
+                gameState[i] = "O";
+                let score = minimax(gameState, 0, false);
+                gameState[i] = "";
+                if (score > bestScore) {
+                    bestScore = score;
+                    move = i;
+                }
+            }
+        }
+        return move;
+    };
+
     const handleCellPlayed = (clickedCell, clickedCellIndex) => {
         gameState[clickedCellIndex] = currentPlayer;
         clickedCell.innerHTML = currentPlayer;
@@ -130,35 +182,16 @@
     };
 
     const handleResultValidation = () => {
-        let roundWon = false;
-        for (let i = 0; i < winningConditions.length; i++) {
-            const winCondition = winningConditions[i];
-            let a = gameState[winCondition[0]];
-            let b = gameState[winCondition[1]];
-            let c = gameState[winCondition[2]];
-            if (a === '' || b === '' || c === '') {
-                continue;
-            }
-            if (a === b && b === c) {
-                roundWon = true;
-                break;
-            }
-        }
-
-        if (roundWon) {
-            statusDisplay.innerHTML = `Player ${currentPlayer} wins!`;
+        if (isWinner(gameState, "X")) {
+            statusDisplay.innerHTML = `Player X wins!`;
             gameActive = false;
-            return;
-        }
-
-        let roundDraw = !gameState.includes("");
-        if (roundDraw) {
+        } else if (isWinner(gameState, "O")) {
+            statusDisplay.innerHTML = `Player O wins!`;
+            gameActive = false;
+        } else if (!gameState.includes("")) {
             statusDisplay.innerHTML = `Tie!`;
             gameActive = false;
-            return;
         }
-
-        handlePlayerChange();
     };
 
     const handleCellClick = (event) => {
@@ -171,6 +204,19 @@
 
         handleCellPlayed(clickedCell, clickedCellIndex);
         handleResultValidation();
+        
+        if (gameActive) {
+            handlePlayerChange();
+            setTimeout(() => {
+                let aiMove = bestMove();
+                if (aiMove !== undefined) {
+                    let aiCell = document.querySelector(`[data-cell-index="${aiMove}"]`);
+                    handleCellPlayed(aiCell, aiMove);
+                    handleResultValidation();
+                    handlePlayerChange();
+                }
+            }, 500);
+        }
     };
 
     const handleRestartGame = () => {
